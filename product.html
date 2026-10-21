@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product – VAAMA FASHION</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/product.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="product">
+  <div id="site-header"></div>
+
+  <main id="main" id="product-body">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb" id="breadcrumb"></nav>
+    </div>
+
+    <div class="container product-layout" id="product-body">
+      <!-- Left: image -->
+      <div class="product-media">
+        <div class="product-img-wrap">
+          <div id="product-image"></div>
+          <div id="product-badges"></div>
+        </div>
+      </div>
+
+      <!-- Right: info -->
+      <div class="product-info">
+        <p class="product-cat" id="product-cat"></p>
+        <h1 class="product-name" id="product-name"></h1>
+        <div class="product-price-row" id="product-price"></div>
+        <p class="product-desc" id="product-desc"></p>
+
+        <p id="sample-note" hidden>
+          <span class="draft-note">Sample item – not real Vaama Fashion stock or pricing.</span>
+        </p>
+
+        <!-- Unavailable -->
+        <div class="unavail-strip" id="unavail-strip" hidden>
+          <p><strong>Currently unavailable.</strong> This item cannot be added to the cart. Please check back later or contact the shop.</p>
+          <div style="margin-top:.75rem" id="product-whatsapp-unavail"></div>
+        </div>
+
+        <!-- Size -->
+        <div class="option-section" id="size-section">
+          <span class="label">Size</span>
+          <div class="options-grid" id="size-options"></div>
+          <p class="option-error" id="size-error" aria-live="polite"></p>
+        </div>
+
+        <!-- Colour -->
+        <div class="option-section" id="colour-section">
+          <span class="label">Colour</span>
+          <div class="options-grid" id="colour-options"></div>
+          <p class="option-error" id="colour-error" aria-live="polite"></p>
+        </div>
+
+        <!-- Quantity + Add to cart -->
+        <div class="add-bar" id="add-bar">
+          <div>
+            <span class="label">Quantity</span>
+            <div class="qty-row" style="margin-top:.4rem">
+              <button class="qty-btn" id="qty-minus" type="button" aria-label="Decrease quantity">−</button>
+              <span class="qty-display" id="qty-display" aria-live="polite">1</span>
+              <button class="qty-btn" id="qty-plus" type="button" aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn--primary" id="add-to-cart" type="button">Add to Cart</button>
+            <div id="product-whatsapp"></div>
+          </div>
+          <p class="add-error" id="add-error" aria-live="polite"></p>
+        </div>
+
+        <!-- Policies (shown only when not yet approved) -->
+        <div class="product-policies" id="policy-section" hidden>
+          <p><strong>Delivery / pickup:</strong> <span id="policy-delivery"></span></p>
+          <p><strong>Returns:</strong> <span id="policy-returns"></span></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script src="js/product.js"></script>
+</body>
+</html>

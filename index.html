@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VAAMA FASHION – Clothing Store, Adajan, Surat</title>
+  <meta name="description" content="VAAMA FASHION is a clothing store in Adajan, Surat. Browse one-piece, two-piece, denims, Korean pants, shirts, T-shirts, frocks and seasonal collections.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="home">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="eyebrow">Adajan, Surat</p>
+          <h1 id="hero-title">Clothing for every day and every season.</h1>
+          <p class="lead">Browse one-piece, two-piece, denims, Korean pants, shirts, T-shirts, frocks and seasonal collections.</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="shop.html">Shop Now</a>
+            <a class="btn btn--outline" href="#categories">Browse Categories</a>
+          </div>
+        </div>
+        <div class="hero__visual" aria-hidden="true">
+          <div class="hero__tile hero__tile--tall ph-0"><strong>One-Piece</strong><span>New styles in</span></div>
+          <div class="hero__tile ph-2"><strong>Denims</strong><span>All fits</span></div>
+          <div class="hero__tile ph-6"><strong>Seasonal</strong><span>Festive picks</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured collections -->
+    <section class="section" aria-labelledby="collections-title">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">Featured collections</p><h2 id="collections-title">Start exploring</h2></div>
+        </div>
+        <div class="collection-grid" id="collection-grid"></div>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="section section--alt" id="categories" aria-labelledby="categories-title">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">Categories</p><h2 id="categories-title">Shop by category</h2></div>
+          <a class="text-link" href="shop.html">View all products</a>
+        </div>
+        <div class="category-grid" id="category-grid"></div>
+      </div>
+    </section>
+
+    <!-- Featured products -->
+    <section class="section" id="featured-section" aria-labelledby="featured-title">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">Featured</p><h2 id="featured-title">Featured products</h2></div>
+          <a class="text-link" href="shop.html?tag=featured">View all featured</a>
+        </div>
+        <div class="product-grid product-grid--4" id="featured-grid"></div>
+      </div>
+    </section>
+
+    <!-- New arrivals -->
+    <section class="section section--alt" id="new-section" aria-labelledby="new-title">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">Just in</p><h2 id="new-title">New arrivals</h2></div>
+          <a class="text-link" href="shop.html?tag=new">View all new arrivals</a>
+        </div>
+        <div class="product-grid product-grid--4" id="new-grid"></div>
+      </div>
+    </section>
+
+    <!-- Sale -->
+    <section class="section" id="sale-section" aria-labelledby="sale-title">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow">Offers</p><h2 id="sale-title">Sale highlights</h2></div>
+          <a class="text-link" href="shop.html?tag=sale">View all sale items</a>
+        </div>
+        <div class="product-grid product-grid--4" id="sale-grid"></div>
+      </div>
+    </section>
+
+    <!-- Store intro -->
+    <section class="section section--alt" aria-labelledby="intro-title">
+      <div class="container intro-grid">
+        <div>
+          <p class="eyebrow">About the store</p>
+          <h2 id="intro-title">Vaama Fashion, Adajan</h2>
+          <p class="lead">A clothing store in Adajan, Surat, offering a variety of fashionable clothing for everyday wear and special occasions.</p>
+          <p>Browse the collection online and send your order enquiry directly to the shop on WhatsApp.</p>
+          <a class="text-link" href="about.html" style="margin-top:.5rem;display:inline-block">More about Vaama Fashion</a>
+        </div>
+        <div class="visit-card" id="visit-card"></div>
+      </div>
+    </section>
+
+    <!-- WhatsApp CTA -->
+    <section class="section" aria-labelledby="cta-title">
+      <div class="container">
+        <div class="cta-band">
+          <h2 id="cta-title">Have a question about a style?</h2>
+          <p class="lead">Message the shop on WhatsApp to ask about availability, sizes or anything else.</p>
+          <div id="home-whatsapp"></div>
+          <p class="wa-note">Opening WhatsApp starts a chat. It does not place or confirm an order.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

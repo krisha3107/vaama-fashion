@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cart – VAAMA FASHION</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cart.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="cart">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="container">
+        <p class="eyebrow">Shopping Cart</p>
+        <h1>Your cart <span id="cart-count-label" style="font-size:1.3rem;font-family:var(--font-sans);font-weight:400;color:var(--ink-soft)"></span></h1>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="container" id="cart-empty" style="padding:3rem 0" hidden>
+      <div class="empty-state">
+        <h2>Your cart is empty</h2>
+        <p>Add something from the shop to get started.</p>
+        <a class="btn btn--dark" href="shop.html" style="margin-top:.75rem">Browse products</a>
+      </div>
+    </div>
+
+    <!-- Cart with items -->
+    <div class="container cart-layout">
+      <!-- Left: item list -->
+      <div>
+        <div class="cart-list-head">
+          <h2>Items</h2>
+        </div>
+        <div id="cart-items"></div>
+      </div>
+
+      <!-- Right: summary + WhatsApp -->
+      <div id="cart-summary" hidden></div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script src="js/cart.js"></script>
+</body>
+</html>

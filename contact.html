@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact – VAAMA FASHION</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="contact">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="container">
+        <p class="eyebrow">Get in touch</p>
+        <h1>Contact</h1>
+        <p class="lead">Visit the store, call, or message us on WhatsApp.</p>
+      </div>
+    </div>
+
+    <div class="container contact-grid">
+
+      <!-- Left: store details -->
+      <div class="contact-details">
+
+        <div class="contact-block">
+          <h2>Store information</h2>
+          <table>
+            <tbody>
+              <tr>
+                <td>Business</td>
+                <td><strong>VAAMA FASHION</strong></td>
+              </tr>
+              <tr>
+                <td>Address</td>
+                <td id="ct-address"></td>
+              </tr>
+              <tr>
+                <td>Phone</td>
+                <td id="ct-phone"></td>
+              </tr>
+              <tr>
+                <td>WhatsApp</td>
+                <td id="ct-whatsapp-num"></td>
+              </tr>
+              <tr>
+                <td>Opening hours</td>
+                <td id="ct-hours"></td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td id="ct-email"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="contact-block">
+          <h2>Follow us</h2>
+          <div class="social-links" id="ct-social"></div>
+        </div>
+
+        <div class="contact-block">
+          <h2>WhatsApp</h2>
+          <p style="font-size:.95rem;color:var(--ink-soft);margin-bottom:1rem">
+            The quickest way to ask about products, check availability, or prepare an order enquiry.
+          </p>
+          <div id="ct-wa-btn"></div>
+          <p style="font-size:.84rem;color:var(--ink-soft);margin-top:.75rem">
+            Clicking this opens WhatsApp. It does not place or confirm an order.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Right: WhatsApp enquiry builder -->
+      <div class="enquiry-form">
+        <h2>Send us a message</h2>
+        <p class="enquiry-note">
+          <strong>This form does not send an email.</strong>
+          It builds a WhatsApp message from what you type. When you click "Open WhatsApp",
+          it opens the WhatsApp app with your message ready to send. You review and send it yourself.
+        </p>
+
+        <div class="field">
+          <label for="eq-name">Your name</label>
+          <input type="text" id="eq-name" maxlength="80" autocomplete="name" placeholder="e.g. Priya Shah">
+        </div>
+
+        <div class="field">
+          <label for="eq-subject">What is your message about?</label>
+          <select id="eq-subject">
+            <option value="">— Choose a topic —</option>
+            <option value="Product availability">Product availability</option>
+            <option value="Size query">Size query</option>
+            <option value="Order enquiry">Order enquiry</option>
+            <option value="Visit / opening hours">Visit / opening hours</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="eq-message">Your message</label>
+          <textarea id="eq-message" maxlength="600" rows="5" placeholder="Type your message here…"></textarea>
+          <p class="field-hint"><span id="eq-char-count">0</span> / 600 characters</p>
+        </div>
+
+        <div>
+          <p style="font-weight:600;font-size:.9rem;margin-bottom:.5rem">Preview</p>
+          <pre id="enquiry-preview"></pre>
+        </div>
+
+        <p class="field-error" id="eq-error" aria-live="polite" style="min-height:1.4rem"></p>
+
+        <div id="eq-wa-btn"></div>
+
+        <p style="font-size:.84rem;color:var(--ink-soft);margin-top:.5rem">
+          Pressing the button opens WhatsApp with your message pre-filled.
+          You review and send it yourself. Your message is not stored on this website.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script>
+    VF.onReady(function () {
+      var esc = VF.util.escapeHtml;
+      var B   = VF.CONFIG.business;
+
+      /* ----- store info table ----- */
+      function fillCell(id, value, label, linkType) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (!VF.util.isFilled(value)) {
+          el.innerHTML = VF.util.placeholderTag(label);
+          return;
+        }
+        var shown = esc(value);
+        if (linkType === "tel")  shown = '<a href="tel:' + esc(value.replace(/[^\d+]/g, "")) + '">' + shown + "</a>";
+        if (linkType === "mail") shown = '<a href="mailto:' + esc(value) + '">' + shown + "</a>";
+        el.innerHTML = shown;
+      }
+
+      // Address
+      var addrEl = document.getElementById("ct-address");
+      if (addrEl) addrEl.textContent = B.address;
+
+      fillCell("ct-phone", B.phone, "Phone number", "tel");
+      fillCell("ct-hours", B.openingHours, "Opening hours");
+      fillCell("ct-email", B.email, "Email address", "mail");
+
+      // WhatsApp number in info table
+      var waNum   = VF.util.whatsappNumber();
+      var ctWaNum = document.getElementById("ct-whatsapp-num");
+      if (ctWaNum) {
+        ctWaNum.innerHTML = waNum
+          ? '<a href="https://wa.me/' + esc(waNum) + '" target="_blank" rel="noopener noreferrer">' +
+            esc(B.phone || ("+" + waNum)) + "</a>"
+          : VF.util.placeholderTag("WhatsApp number");
+      }
+
+      /* ----- social links ----- */
+      var social  = B.social || {};
+      var sl      = document.getElementById("ct-social");
+      if (sl) {
+        var links = [];
+
+        if (VF.util.isFilled(social.instagram)) {
+          // Extract handle from URL or use the URL directly if it is already a handle.
+          var igUrl    = social.instagram;
+          var igHandle = "@_vaama_fashion_";  // display handle
+          links.push(
+            '<a class="social-link" href="' + esc(igUrl) + '" target="_blank" rel="noopener noreferrer">' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+            'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>' +
+            '<circle cx="12" cy="12" r="4"/>' +
+            '<circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg> ' +
+            esc(igHandle) + "</a>"
+          );
+        }
+
+        if (VF.util.isFilled(social.facebook)) {
+          links.push(
+            '<a class="social-link" href="' + esc(social.facebook) + '" target="_blank" rel="noopener noreferrer">' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+            'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> ' +
+            "Facebook</a>"
+          );
+        }
+
+        if (links.length) {
+          sl.innerHTML = links.join("");
+        } else {
+          sl.innerHTML = '<span class="placeholder-tag">Social media links – to be confirmed</span>';
+        }
+      }
+
+      // WhatsApp button in details column
+      var ctWaBtn = document.getElementById("ct-wa-btn");
+      if (ctWaBtn) {
+        ctWaBtn.innerHTML = VF.whatsapp.buttonHtml(
+          "Hello VAAMA FASHION, I would like to get in touch.",
+          "Open WhatsApp"
+        );
+      }
+
+      /* ----- enquiry builder ----- */
+      var nameEl    = document.getElementById("eq-name");
+      var subjEl    = document.getElementById("eq-subject");
+      var msgEl     = document.getElementById("eq-message");
+      var preview   = document.getElementById("enquiry-preview");
+      var charCount = document.getElementById("eq-char-count");
+      var errEl     = document.getElementById("eq-error");
+      var btnWrap   = document.getElementById("eq-wa-btn");
+
+      function buildMessage() {
+        var name = (nameEl  ? nameEl.value  : "").trim();
+        var subj = (subjEl  ? subjEl.value  : "").trim();
+        var msg  = (msgEl   ? msgEl.value   : "").trim();
+        var parts = ["Hello VAAMA FASHION,"];
+        if (name) parts.push("My name is " + name + ".");
+        if (subj) parts.push("Topic: " + subj + ".");
+        if (msg)  parts.push("\n" + msg);
+        return parts.join("\n");
+      }
+
+      function validate() {
+        var subj = (subjEl ? subjEl.value : "").trim();
+        var msg  = (msgEl  ? msgEl.value  : "").trim();
+        if (!subj) return "Please choose a topic.";
+        if (!msg)  return "Please write a message.";
+        return "";
+      }
+
+      function update() {
+        if (charCount) charCount.textContent = (msgEl ? msgEl.value : "").length;
+        var err  = validate();
+        var full = buildMessage();
+
+        if (preview) {
+          if (!err) { preview.textContent = full; preview.classList.add("has-content"); }
+          else      { preview.textContent = "";   preview.classList.remove("has-content"); }
+        }
+
+        if (btnWrap) {
+          btnWrap.innerHTML = err
+            ? '<button class="btn btn--whatsapp" type="button" disabled>Open WhatsApp</button>'
+            : VF.whatsapp.buttonHtml(full, "Open WhatsApp");
+        }
+
+        if (errEl) errEl.textContent = "";
+      }
+
+      if (nameEl) nameEl.addEventListener("input", update);
+      if (subjEl) subjEl.addEventListener("change", update);
+      if (msgEl) {
+        msgEl.addEventListener("input", update);
+        msgEl.addEventListener("blur", function () { if (errEl) errEl.textContent = validate(); });
+      }
+
+      update();
+    });
+  </script>
+</body>
+</html>

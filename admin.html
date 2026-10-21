@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin – VAAMA FASHION</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="admin">
+
+  <!-- LOGIN -->
+  <div id="login-screen">
+    <div class="admin-login-wrap">
+      <div class="admin-login-box">
+        <a class="wordmark" href="index.html">
+          <span class="wordmark__main">VAAMA</span>
+          <span class="wordmark__sub">FASHION</span>
+        </a>
+        <h1>Admin login</h1>
+        <div class="login-warning">
+          This login is for local demonstration only. The password is stored in
+          <code>js/config.js</code> and is visible in the page source code.
+          Do not use a real business password here.
+        </div>
+        <form id="login-form" novalidate>
+          <div class="field">
+            <label for="login-user">Username</label>
+            <input type="text" id="login-user" autocomplete="username" value="admin">
+          </div>
+          <div class="field">
+            <label for="login-pass">Password</label>
+            <input type="password" id="login-pass" autocomplete="current-password">
+          </div>
+          <p class="field-error" id="login-error" aria-live="polite" style="min-height:1.4rem"></p>
+          <button class="btn btn--primary" type="submit" style="width:100%">Log in</button>
+        </form>
+        <p style="text-align:center;margin-top:.75rem"><a href="index.html">← Back to store</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN APP -->
+  <div id="admin-screen" hidden>
+    <div class="admin-wrap">
+
+      <aside class="admin-sidebar" aria-label="Admin navigation">
+        <a class="wordmark wordmark--light" href="index.html">
+          <span class="wordmark__main">VAAMA</span>
+          <span class="wordmark__sub">FASHION</span>
+        </a>
+        <p class="sidebar-label">Admin</p>
+        <ul class="sidebar-nav">
+          <li><a href="#" data-panel="dashboard">Dashboard</a></li>
+          <li><a href="#" data-panel="products">Products</a></li>
+          <li><a href="#" data-panel="add">Add product</a></li>
+          <li><a href="#" data-panel="data">Data tools</a></li>
+        </ul>
+        <div class="sidebar-footer">
+          <button id="logout-btn" type="button">Log out</button>
+        </div>
+      </aside>
+
+      <main class="admin-main" id="main">
+        <div class="admin-header">
+          <h1 id="admin-title">Dashboard</h1>
+          <a href="shop.html" target="_blank" class="btn btn--outline btn--small">View store ↗</a>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div class="admin-panel is-active" id="panel-dashboard">
+          <div class="stat-grid" id="stat-grid"></div>
+          <div class="data-card">
+            <h2>System status</h2>
+            <table style="width:100%;border-collapse:collapse;font-size:.9rem">
+              <tr>
+                <td style="padding:.4rem 0;font-weight:600;width:180px">Storage</td>
+                <td id="dash-storage"></td>
+              </tr>
+              <tr>
+                <td style="padding:.4rem 0;font-weight:600">WhatsApp</td>
+                <td>
+                  <span id="dash-wa-ok" style="color:var(--sage)">✔ Number configured — WhatsApp ordering is active.</span>
+                  <span id="dash-wa-no" style="color:var(--danger)">✘ Number not set. Add it to <code>js/config.js</code> → <code>whatsappNumber</code>.</span>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="data-card">
+            <h2>Quick actions</h2>
+            <div style="display:flex;flex-wrap:wrap;gap:.75rem">
+              <button class="btn btn--primary btn--small" id="add-product-btn" type="button">Add new product</button>
+              <a class="btn btn--outline btn--small" href="shop.html" target="_blank">View shop</a>
+              <a class="btn btn--outline btn--small" href="cart.html" target="_blank">View cart</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCTS -->
+        <div class="admin-panel" id="panel-products">
+          <div class="table-toolbar">
+            <input type="search" id="table-search" placeholder="Search by name, ID or category…" maxlength="100">
+            <span id="table-count" style="font-size:.88rem;color:var(--ink-soft)"></span>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table" aria-label="Products">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Flags</th>
+                  <th>Image path</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="product-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ADD / EDIT -->
+        <div class="admin-panel" id="panel-add">
+          <p style="color:var(--ink-soft)">Click "Add product" in the sidebar or edit a product from the Products list.</p>
+        </div>
+
+        <!-- DATA TOOLS -->
+        <div class="admin-panel" id="panel-data">
+          <div class="data-card">
+            <h2>Export products</h2>
+            <p>Copy this JSON to back up the current product catalogue. Paste it into a text file and keep it somewhere safe.</p>
+            <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
+              <button class="btn btn--outline btn--small" id="refresh-export" type="button">Refresh</button>
+              <button class="btn btn--outline btn--small" id="copy-export" type="button">Copy to clipboard</button>
+            </div>
+            <textarea id="export-output" readonly></textarea>
+          </div>
+
+          <div class="data-card">
+            <h2>Import products</h2>
+            <p>Paste a previously exported JSON here to restore products. <strong>This replaces all current products.</strong> Export first to back up.</p>
+            <textarea id="import-input" placeholder="Paste exported JSON here…"></textarea>
+            <button class="btn btn--danger btn--small" id="import-btn" type="button" style="margin-top:.75rem">Import — replaces all products</button>
+          </div>
+
+          <div class="data-card">
+            <h2>Reset to sample products</h2>
+            <p>Removes all current products and restores the 24 built-in sample items. Useful for resetting a demonstration.</p>
+            <button class="btn btn--danger btn--small" id="reset-btn" type="button">Reset to sample products</button>
+          </div>
+
+          <div class="data-card">
+            <h2>How to add a real product photo</h2>
+            <ol style="font-size:.92rem;color:var(--ink-soft);padding-left:1.25rem;line-height:1.9">
+              <li>Place the photo file in <code>assets/images/products/</code>, e.g. <code>VF-001.jpg</code>.</li>
+              <li>Go to Products, click Edit on the product.</li>
+              <li>In the Image path field type: <code>assets/images/products/VF-001.jpg</code></li>
+              <li>Click Save changes.</li>
+              <li>Open the product page in the shop to confirm the photo appears.</li>
+            </ol>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

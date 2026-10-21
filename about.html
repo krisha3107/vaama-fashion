@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About – VAAMA FASHION</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/about.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="about">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="container">
+        <p class="eyebrow">Our story</p>
+        <h1>About Vaama Fashion</h1>
+        <p class="lead">A clothing store in Adajan, Surat.</p>
+      </div>
+    </div>
+
+    <div class="container about-grid">
+      <article class="about-body">
+        <h2>Who we are</h2>
+        <p>Vaama Fashion is a clothing store located in Adajan, Surat, Gujarat. The store offers a wide variety of fashionable clothing for everyday wear and special occasions, organised into easy-to-browse categories.</p>
+        <p>From casual T-shirts and Korean-style pants to festive Ghaghra Choli and seasonal collections, Vaama Fashion brings a curated range of styles to customers in Surat and the surrounding area.</p>
+
+        <h2>What we offer</h2>
+        <ul>
+          <li>One-Piece dresses and outfits</li>
+          <li>Two-Piece co-ord sets</li>
+          <li>Denims — jeans and denim styles</li>
+          <li>Korean Pants — straight-cut, wide-leg and cargo styles</li>
+          <li>Shirts and T-Shirts for everyday wear</li>
+          <li>Frocks for all occasions</li>
+          <li>Seasonal Collections including Ghaghra Choli</li>
+        </ul>
+
+        <h2>Shopping with us</h2>
+        <p>Browse the collection online, explore by category, and send your order enquiry directly to the shop on WhatsApp. The shop team will confirm availability, sizes and any other details before your order is finalised.</p>
+
+        <h2>Visit the store</h2>
+        <p>We are located at <strong id="about-address"></strong>.</p>
+        <p>You are welcome to visit us in person, or get in touch on WhatsApp with any questions about the collection.</p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem">
+          <a class="btn btn--primary" href="shop.html">Browse the collection</a>
+          <a class="btn btn--outline" href="contact.html">Contact us</a>
+        </div>
+      </article>
+
+      <aside class="about-aside">
+        <div class="about-card">
+          <h3>Find us</h3>
+          <ul>
+            <li><span class="label">Address</span><span id="aside-address"></span></li>
+            <li><span class="label">Phone</span><span id="aside-phone"></span></li>
+            <li><span class="label">Hours</span><span id="aside-hours"></span></li>
+            <li><span class="label">Email</span><span id="aside-email"></span></li>
+          </ul>
+        </div>
+
+        <div class="about-card">
+          <h3>Collections</h3>
+          <ul id="about-categories"></ul>
+        </div>
+
+        <div class="about-card">
+          <h3>Message us on WhatsApp</h3>
+          <p>Have a question about a style or want to check availability?</p>
+          <div id="about-whatsapp"></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script>
+    <script src="js/config.js"></script>
+<script src="js/products.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/common.js"></script>
+<script src="js/whatsapp.js"></script>
+<script>
+  VF.onReady(function () {
+    var esc = VF.util.escapeHtml;
+    var B   = VF.CONFIG.business;
+
+    function fill(id, value, label, linkType) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (!VF.util.isFilled(value)) { el.innerHTML = VF.util.placeholderTag(label); return; }
+      var shown = esc(value);
+      if (linkType === "tel")  shown = '<a href="tel:' + esc(value.replace(/[^\d+]/g, "")) + '">' + shown + "</a>";
+      if (linkType === "mail") shown = '<a href="mailto:' + esc(value) + '">' + shown + "</a>";
+      el.innerHTML = shown;
+    }
+
+    // Address
+    var aa = document.getElementById("about-address");
+    if (aa) aa.textContent = B.address;
+    var sa = document.getElementById("aside-address");
+    if (sa) sa.textContent = B.address;
+
+    fill("aside-phone", B.phone, "Phone number", "tel");
+    fill("aside-hours", B.openingHours, "Opening hours");
+    fill("aside-email", B.email, "Email address", "mail");
+
+    // Instagram in aside
+    var igWrap = document.getElementById("aside-instagram");
+    if (igWrap) {
+      var social = B.social || {};
+      if (VF.util.isFilled(social.instagram)) {
+        igWrap.innerHTML = '<a href="' + esc(social.instagram) +
+          '" target="_blank" rel="noopener noreferrer">@_vaama_fashion_</a>';
+      } else {
+        igWrap.innerHTML = VF.util.placeholderTag("Instagram");
+      }
+    }
+
+    // Categories
+    var catsEl = document.getElementById("about-categories");
+    if (catsEl) {
+      catsEl.innerHTML = VF.CATEGORIES.map(function (c) {
+        return '<li><a href="shop.html?category=' + encodeURIComponent(c.id) + '">' + esc(c.name) + "</a></li>";
+      }).join("");
+    }
+
+    // WhatsApp
+    var waEl = document.getElementById("about-whatsapp");
+    if (waEl) {
+      waEl.innerHTML = VF.whatsapp.buttonHtml(
+        "Hello VAAMA FASHION, I have a question about your collection.",
+        "Chat on WhatsApp"
+      );
+    }
+  });
+</script>
+  </script>
+</body>
+</html>

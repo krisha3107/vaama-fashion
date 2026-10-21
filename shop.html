@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop – VAAMA FASHION</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="shop">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="container">
+        <p class="eyebrow">Collections</p>
+        <h1>Shop</h1>
+        <p class="lead">Search, filter and sort the catalogue. All products shown are sample items for demonstration.</p>
+      </div>
+    </div>
+
+    <div class="container shop-layout">
+      <aside class="filters-wrap" aria-label="Product filters">
+        <button type="button" class="btn btn--outline filter-toggle" id="filter-toggle"
+                aria-expanded="false" aria-controls="filter-panel">Filters</button>
+
+        <div class="filters" id="filter-panel">
+          <div class="filters__head">
+            <h2 class="filters__title">Filter products</h2>
+            <button type="button" class="btn btn--outline btn--small" id="clear-filters" data-action="clear-filters">Clear all</button>
+          </div>
+
+          <div class="field">
+            <label for="search-input">Search by product name</label>
+            <input type="search" id="search-input" data-filter autocomplete="off" maxlength="100">
+          </div>
+
+          <fieldset>
+            <legend>Category</legend>
+            <div id="category-options"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Highlights</legend>
+            <label class="check"><input type="radio" name="tag" value="all" data-filter checked> <span>All products</span></label>
+            <label class="check"><input type="radio" name="tag" value="new" data-filter> <span>New arrivals</span></label>
+            <label class="check"><input type="radio" name="tag" value="sale" data-filter> <span>On sale</span></label>
+            <label class="check"><input type="radio" name="tag" value="featured" data-filter> <span>Featured</span></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Availability</legend>
+            <label class="check"><input type="checkbox" id="avail-only" data-filter> <span>Show available items only</span></label>
+          </fieldset>
+        </div>
+      </aside>
+
+      <section aria-label="Products">
+        <div class="shop-toolbar">
+          <div>
+            <p id="result-count" aria-live="polite"></p>
+            <p id="filter-summary"></p>
+          </div>
+          <div class="sort-field">
+            <label for="sort-select">Sort by</label>
+            <select id="sort-select" data-filter>
+              <option value="default">Default order</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="name-asc">Name: A to Z</option>
+              <option value="name-desc">Name: Z to A</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="product-grid" id="product-grid"></div>
+        <div class="empty-state" id="empty-state" hidden></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/shop.js"></script>
+</body>
+</html>

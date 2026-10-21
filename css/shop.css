@@ -1,0 +1,39 @@
+/* VAAMA FASHION — css/shop.css (Shop page only) */
+.shop-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2.5rem; padding: 2.5rem 0 1rem; }
+
+.filters {
+  position: sticky; top: 5.75rem; max-height: calc(100vh - 7rem); overflow-y: auto;
+  background: var(--ivory); border: 1px solid var(--line); padding: 1.25rem;
+}
+.filters__head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: 1.25rem; }
+.filters__title { font-family: var(--font-sans); font-size: 1rem; font-weight: 600; margin: 0; }
+.filters fieldset { border: 0; padding: 0; margin: 0 0 1.4rem; }
+.filters legend {
+  padding: 0; margin-bottom: .5rem; font-size: .78rem; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
+}
+.check { display: flex; align-items: center; gap: .6rem; min-height: 36px; cursor: pointer; font-size: .95rem; }
+.check input { width: 1.1rem; height: 1.1rem; margin: 0; accent-color: var(--rose); flex: none; }
+
+.filter-toggle { display: none; width: 100%; }
+
+.shop-toolbar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+  margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line);
+}
+.shop-toolbar p { margin: 0; }
+#result-count { font-weight: 600; }
+#filter-summary { font-size: .88rem; color: var(--ink-soft); }
+.sort-field { display: flex; align-items: center; gap: .6rem; }
+.sort-field label { font-size: .9rem; font-weight: 600; }
+.sort-field select {
+  min-height: 44px; padding: .5rem .8rem; font: inherit; color: var(--charcoal);
+  background: var(--ivory); border: 1px solid #8f877d; border-radius: var(--radius);
+}
+
+@media (max-width: 800px) {
+  .shop-layout { grid-template-columns: 1fr; gap: 1rem; padding-top: 1.5rem; }
+  .filter-toggle { display: inline-flex; }
+  .filters { display: none; position: static; max-height: none; margin-top: .75rem; }
+  .filters.is-open { display: block; }
+}

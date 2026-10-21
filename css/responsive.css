@@ -1,0 +1,33 @@
+/* =====================================================================
+   VAAMA FASHION — css/responsive.css  (shared responsive rules)
+   Must be linked AFTER style.css.
+   ===================================================================== */
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .section { padding: 3rem 0; }
+}
+
+@media (max-width: 800px) {
+  .nav-toggle { display: inline-flex; }
+  .primary-nav {
+    display: none; position: absolute; left: 0; right: 0; top: 100%;
+    background: var(--ivory); border-bottom: 1px solid var(--line); padding: .25rem 1rem 1rem;
+  }
+  .primary-nav.is-open { display: block; }
+  .primary-nav ul { flex-direction: column; gap: 0; }
+  .primary-nav a { display: block; padding: .9rem .25rem; border-bottom: 1px solid var(--line); }
+  .primary-nav a::after { display: none; }
+  .primary-nav a[aria-current="page"] { color: var(--rose); font-weight: 600; }
+}
+
+@media (max-width: 560px) {
+  .container { width: min(100% - 1.5rem, var(--maxw)); }
+  .header-inner { min-height: 4rem; gap: .75rem; }
+  .wordmark__main { font-size: 1.4rem; letter-spacing: .26em; }
+  .wordmark__sub { letter-spacing: .5em; }
+  .cart-link__text { display: none; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem .75rem; }
+  .product-card__name { font-size: .95rem; }
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .section { padding: 2.5rem 0; }
+}
