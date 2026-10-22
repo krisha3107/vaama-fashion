@@ -125,34 +125,54 @@
   var BAG_ICON = '<svg class="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
     'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' +
     '<path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>';
+  var USER_ICON = '<svg class="icon" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' +
+    '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
 
   function currentPage() {
     var p = document.body.getAttribute("data-page") || "";
-    return p === "product" ? "shop" : p;
+    if (p === "product") return "shop";
+    if (p === "account") return "login";
+    return p;
   }
 
   function renderHeader() {
     var host = document.getElementById("site-header");
     if (!host) return;
     var active = currentPage();
+    var user = (VF.storage && typeof VF.storage.getCurrentUser === "function") ? VF.storage.getCurrentUser() : null;
+    var isAccountPage = (active === "login" || active === "account");
+
     var links = NAV.map(function (n) {
       return '<li><a href="' + n.href + '"' + (n.page === active ? ' aria-current="page"' : "") + ">" + n.label + "</a></li>";
     }).join("");
 
+    // Add mobile account link
+    var mobileAccountText = user ? ("My Account (" + esc(user.name.split(" ")[0]) + ")") : "Sign In / Register";
+    var mobileAccountLi = '<li class="mobile-only-nav"><a href="login.html"' + (isAccountPage ? ' aria-current="page"' : "") + ">" + mobileAccountText + "</a></li>";
+
     var alerts = "";
     if (!VF.storage.status.persistent) {
       alerts += '<div class="site-alert" role="alert"><div class="container">' +
-        "<strong>Browser storage is unavailable.</strong> Your cart will not be saved between pages. " +
+        "<strong>Browser storage is unavailable.</strong> Your cart and login will not be saved between pages. " +
         "Try Chrome or Edge, and avoid private/incognito mode.</div></div>";
     }
+
+    var accountLabel = user ? ("Hi, " + esc(user.name.split(" ")[0])) : "Sign In";
+    var accountTitle = user ? ("Account: " + esc(user.name)) : "Sign In / Register";
+    var accountHtml =
+      '<a class="account-link' + (user ? " is-logged-in" : "") + '" href="login.html" data-account-link ' +
+      'title="' + accountTitle + '"' + (isAccountPage ? ' aria-current="page"' : "") + ">" +
+      USER_ICON + '<span class="account-link__text">' + accountLabel + "</span></a>";
 
     host.innerHTML =
       '<a class="skip-link" href="#main">Skip to main content</a>' +
       '<header class="site-header"><div class="container header-inner">' +
       '<a class="wordmark" href="index.html" aria-label="VAAMA FASHION – home">' +
       '<span class="wordmark__main">VAAMA</span><span class="wordmark__sub">FASHION</span></a>' +
-      '<nav id="primary-nav" class="primary-nav" aria-label="Primary"><ul>' + links + "</ul></nav>" +
+      '<nav id="primary-nav" class="primary-nav" aria-label="Primary"><ul>' + links + mobileAccountLi + "</ul></nav>" +
       '<div class="header-actions">' +
+      accountHtml +
       '<a class="cart-link" href="cart.html" data-cart-link' + (active === "cart" ? ' aria-current="page"' : "") + ">" +
       BAG_ICON + '<span class="cart-link__text">Cart</span>' +
       '<span class="cart-badge" data-cart-count hidden>0</span></a>' +
@@ -169,6 +189,20 @@
     toggle.addEventListener("click", function () { setOpen(!nav.classList.contains("is-open")); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") setOpen(false); });
     nav.addEventListener("click", function (e) { if (e.target.tagName === "A") setOpen(false); });
+  }
+
+  function updateAuthHeader() {
+    var host = document.getElementById("site-header");
+    if (!host) return;
+    var link = host.querySelector("[data-account-link]");
+    if (!link) { renderHeader(); return; }
+    var user = (VF.storage && typeof VF.storage.getCurrentUser === "function") ? VF.storage.getCurrentUser() : null;
+    var accountLabel = user ? ("Hi, " + esc(user.name.split(" ")[0])) : "Sign In";
+    var accountTitle = user ? ("Account: " + esc(user.name)) : "Sign In / Register";
+    link.title = accountTitle;
+    link.classList.toggle("is-logged-in", !!user);
+    var textEl = link.querySelector(".account-link__text");
+    if (textEl) textEl.textContent = accountLabel;
   }
 
   function contactLine(label, value, asLink) {
@@ -197,7 +231,7 @@
       '<div><h2 class="footer-heading">Explore</h2><ul class="footer-list">' +
       '<li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li>' +
       '<li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li>' +
-      '<li><a href="cart.html">Cart</a></li></ul></div>' +
+      '<li><a href="cart.html">Cart</a></li><li><a href="login.html">My Account</a></li></ul></div>' +
       '<div><h2 class="footer-heading">Collections</h2><ul class="footer-list">' + cats + "</ul></div>" +
       '<div><h2 class="footer-heading">Visit us</h2><ul class="footer-list">' +
       "<li>" + esc(B.address) + "</li>" +
@@ -270,6 +304,7 @@
     placeholderHtml: placeholderHtml,
     productCardHtml: productCardHtml,
     updateCartBadge: updateCartBadge,
+    updateAuthHeader: updateAuthHeader,
     toast: toast
   };
 })();

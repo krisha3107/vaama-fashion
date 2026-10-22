@@ -12,7 +12,9 @@
     products:      PREFIX + "products",
     corruptBackup: PREFIX + "products.corrupt-backup",
     cart:          PREFIX + "cart",
-    session:       PREFIX + "adminSession"
+    session:       PREFIX + "adminSession",
+    users:         PREFIX + "users",
+    userSession:   PREFIX + "userSession"
   };
 
   /* ---------- low-level storage with in-memory fallback ---------- */
@@ -253,6 +255,284 @@
     } catch (e) { sessionMem.admin = on ? "1" : "0"; }
   }
 
+  /* ---------- user accounts & customer authentication ---------- */
+  var DEFAULT_USERS = [
+    {
+      id: "usr_001",
+      name: "Krisha Patel",
+      email: "customer@vaamafashion.com",
+      phone: "7600524729",
+      city: "Adajan, Surat",
+      password: "Password123!",
+      createdAt: "2026-10-01T10:00:00.000Z",
+      preferences: ["One-Piece", "Korean Pants"]
+    }
+  ];
+
+  function loadUsers() {
+    var raw = rawGet(KEYS.users);
+    if (raw === null) {
+      saveUsers(DEFAULT_USERS);
+      return clone(DEFAULT_USERS);
+    }
+    var parsed = safeJSON(raw);
+    if (!parsed.ok || !Array.isArray(parsed.value)) {
+      saveUsers(DEFAULT_USERS);
+      return clone(DEFAULT_USERS);
+    }
+    return parsed.value;
+  }
+
+  function saveUsers(users) {
+    rawSet(KEYS.users, JSON.stringify(users));
+    return true;
+  }
+
+  function getUsers() {
+    return loadUsers().map(function (u) {
+      var copy = clone(u);
+      delete copy.password;
+      return copy;
+    });
+  }
+
+  function findUserByEmail(email) {
+    if (!email || typeof email !== "string") return null;
+    var norm = email.trim().toLowerCase();
+    var users = loadUsers();
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].email && users[i].email.trim().toLowerCase() === norm) {
+        return users[i];
+      }
+    }
+    return null;
+  }
+
+  function findUserByPhone(phone) {
+    if (!phone || typeof phone !== "string") return null;
+    var digits = String(phone).replace(/[\s+\-()]/g, "");
+    if (digits.length > 10 && digits.indexOf("91") === 0) digits = digits.slice(2);
+    var users = loadUsers();
+    for (var i = 0; i < users.length; i++) {
+      var uDigits = String(users[i].phone || "").replace(/[\s+\-()]/g, "");
+      if (uDigits.length > 10 && uDigits.indexOf("91") === 0) uDigits = uDigits.slice(2);
+      if (uDigits && uDigits === digits) return users[i];
+    }
+    return null;
+  }
+
+  function registerUser(userData) {
+    var errs = [];
+    if (!userData || typeof userData !== "object") {
+      return { ok: false, errors: ["Missing user registration data."] };
+    }
+
+    var name = typeof userData.name === "string" ? userData.name.trim() : "";
+    var email = typeof userData.email === "string" ? userData.email.trim().toLowerCase() : "";
+    var phone = typeof userData.phone === "string" ? userData.phone.trim() : "";
+    var city = typeof userData.city === "string" ? userData.city.trim() : "Surat";
+    var password = typeof userData.password === "string" ? userData.password : "";
+    var preferences = Array.isArray(userData.preferences) ? userData.preferences : [];
+
+    if (!name || name.length < 2) {
+      errs.push("Full name must be at least 2 characters.");
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errs.push("Please enter a valid email address.");
+    } else if (findUserByEmail(email)) {
+      errs.push("An account with this email address already exists. Please sign in instead.");
+    }
+
+    var phoneDigits = phone.replace(/[\s+\-()]/g, "");
+    if (phoneDigits.length > 10 && phoneDigits.indexOf("91") === 0) phoneDigits = phoneDigits.slice(2);
+    if (!phoneDigits || !/^[6-9]\d{9}$/.test(phoneDigits)) {
+      errs.push("Please enter a valid 10-digit Indian mobile number (e.g. 98765 43210).");
+    }
+
+    if (!password || password.length < 6) {
+      errs.push("Password must be at least 6 characters long.");
+    }
+
+    if (errs.length > 0) return { ok: false, errors: errs };
+
+    var newUser = {
+      id: "usr_" + Date.now().toString(36) + Math.floor(Math.random() * 1000).toString(36),
+      name: name,
+      email: email,
+      phone: phoneDigits,
+      city: city || "Surat",
+      password: password,
+      preferences: preferences,
+      createdAt: new Date().toISOString()
+    };
+
+    var users = loadUsers();
+    users.push(newUser);
+    saveUsers(users);
+
+    // Auto-login upon registration
+    var safeUser = clone(newUser);
+    delete safeUser.password;
+    setCurrentUser(safeUser, true);
+
+    return { ok: true, user: safeUser };
+  }
+
+  function authenticateUser(identifier, password) {
+    if (!identifier || !password) {
+      return { ok: false, error: "Please enter both identifier (email or phone) and password." };
+    }
+    var cleanId = identifier.trim();
+    var user = null;
+    if (cleanId.indexOf("@") !== -1) {
+      user = findUserByEmail(cleanId);
+    } else {
+      user = findUserByPhone(cleanId) || findUserByEmail(cleanId);
+    }
+
+    if (!user) {
+      return { ok: false, error: "No account found matching those details. Please check your spelling or create an account." };
+    }
+    if (user.password !== password) {
+      return { ok: false, error: "Incorrect password. Please try again or use Forgot Password." };
+    }
+
+    var safeUser = clone(user);
+    delete safeUser.password;
+    return { ok: true, user: safeUser };
+  }
+
+  function getCurrentUser() {
+    var raw = null;
+    try {
+      raw = window.sessionStorage.getItem(KEYS.userSession);
+    } catch (e) {}
+    if (!raw && persistent) {
+      try {
+        raw = window.localStorage.getItem(KEYS.userSession);
+      } catch (e) {}
+    }
+    if (!raw && sessionMem.userSession) {
+      raw = sessionMem.userSession;
+    }
+    if (!raw) return null;
+    var parsed = safeJSON(raw);
+    return parsed.ok ? parsed.value : null;
+  }
+
+  function setCurrentUser(user, remember) {
+    if (!user) return clearCurrentUser();
+    var safeUser = clone(user);
+    delete safeUser.password;
+    var str = JSON.stringify(safeUser);
+    try {
+      window.sessionStorage.setItem(KEYS.userSession, str);
+    } catch (e) {
+      sessionMem.userSession = str;
+    }
+    if (persistent && remember) {
+      try {
+        window.localStorage.setItem(KEYS.userSession, str);
+      } catch (e) {}
+    } else if (persistent && !remember) {
+      try {
+        window.localStorage.removeItem(KEYS.userSession);
+      } catch (e) {}
+    }
+    if (VF.ui && typeof VF.ui.updateAuthHeader === "function") {
+      VF.ui.updateAuthHeader();
+    }
+    return safeUser;
+  }
+
+  function clearCurrentUser() {
+    try { window.sessionStorage.removeItem(KEYS.userSession); } catch (e) {}
+    if (persistent) {
+      try { window.localStorage.removeItem(KEYS.userSession); } catch (e) {}
+    }
+    delete sessionMem.userSession;
+    if (VF.ui && typeof VF.ui.updateAuthHeader === "function") {
+      VF.ui.updateAuthHeader();
+    }
+  }
+
+  function updateUserProfile(userId, updates) {
+    var users = loadUsers();
+    var target = null;
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].id === userId) {
+        target = users[i];
+        break;
+      }
+    }
+    if (!target) return { ok: false, error: "User not found." };
+
+    if (updates.name && typeof updates.name === "string" && updates.name.trim().length >= 2) {
+      target.name = updates.name.trim();
+    }
+    if (updates.phone && typeof updates.phone === "string") {
+      var d = updates.phone.replace(/[\s+\-()]/g, "");
+      if (d.length > 10 && d.indexOf("91") === 0) d = d.slice(2);
+      if (/^[6-9]\d{9}$/.test(d)) target.phone = d;
+    }
+    if (typeof updates.city === "string") {
+      target.city = updates.city.trim();
+    }
+    if (Array.isArray(updates.preferences)) {
+      target.preferences = updates.preferences;
+    }
+
+    saveUsers(users);
+
+    var cur = getCurrentUser();
+    if (cur && cur.id === userId) {
+      var safe = clone(target);
+      delete safe.password;
+      setCurrentUser(safe, true);
+      return { ok: true, user: safe };
+    }
+    var safeTarget = clone(target);
+    delete safeTarget.password;
+    return { ok: true, user: safeTarget };
+  }
+
+  function changePassword(userId, currentPassword, newPassword) {
+    var users = loadUsers();
+    var target = null;
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].id === userId) {
+        target = users[i];
+        break;
+      }
+    }
+    if (!target) return { ok: false, error: "User not found." };
+    if (target.password !== currentPassword) return { ok: false, error: "Current password does not match." };
+    if (!newPassword || newPassword.length < 6) return { ok: false, error: "New password must be at least 6 characters." };
+
+    target.password = newPassword;
+    saveUsers(users);
+    return { ok: true };
+  }
+
+  function resetPasswordByEmail(email, newPassword) {
+    if (!email || !newPassword || newPassword.length < 6) {
+      return { ok: false, error: "New password must be at least 6 characters." };
+    }
+    var users = loadUsers();
+    var norm = email.trim().toLowerCase();
+    var target = null;
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].email && users[i].email.trim().toLowerCase() === norm) {
+        target = users[i];
+        break;
+      }
+    }
+    if (!target) return { ok: false, error: "No account found with this email address." };
+    target.password = newPassword;
+    saveUsers(users);
+    return { ok: true };
+  }
+
   /* ---------- cart ---------- */
   function notifyBadge() {
     if (VF.ui && typeof VF.ui.updateCartBadge === "function") VF.ui.updateCartBadge();
@@ -418,7 +698,29 @@
     exportProductsJSON: exportProductsJSON,
     importProductsJSON: importProductsJSON,
     isAdminLoggedIn: isAdminLoggedIn,
-    setAdminLoggedIn: setAdminLoggedIn
+    setAdminLoggedIn: setAdminLoggedIn,
+    getUsers: getUsers,
+    findUserByEmail: findUserByEmail,
+    findUserByPhone: findUserByPhone,
+    registerUser: registerUser,
+    authenticateUser: authenticateUser,
+    getCurrentUser: getCurrentUser,
+    setCurrentUser: setCurrentUser,
+    clearCurrentUser: clearCurrentUser,
+    updateUserProfile: updateUserProfile,
+    changePassword: changePassword,
+    resetPasswordByEmail: resetPasswordByEmail
+  };
+  VF.auth = {
+    getUsers: getUsers,
+    getCurrentUser: getCurrentUser,
+    register: registerUser,
+    login: authenticateUser,
+    setCurrentUser: setCurrentUser,
+    logout: clearCurrentUser,
+    updateProfile: updateUserProfile,
+    changePassword: changePassword,
+    resetPassword: resetPasswordByEmail
   };
   VF.cart = cart;
 })();

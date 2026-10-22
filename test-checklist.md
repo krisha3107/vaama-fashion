@@ -207,6 +207,32 @@ Remove the test number afterwards.
 
 ---
 
+## Section 11: Customer Registration, Login & Account Dashboard
+
+| # | Test | Actions | Expected result | Actual result | P / F |
+|---|------|---------|-----------------|---------------|-------|
+| AU-1 | Login page loads | Open login.html | Sign In card with tabs (Sign In / Create Account) and demo box visible | | |
+| AU-2 | Header account link | Check site header from any page | Shows User icon and "Sign In" text | | |
+| AU-3 | Fill demo credentials | Click "⚡ Fill Demo Credentials" | Pre-fills customer@vaamafashion.com and Password123! | | |
+| AU-4 | Password visibility toggle | Click eye icon in password field | Password toggles between masked dots and readable text | | |
+| AU-5 | Login error handling | Enter wrong password, click Sign In | Red alert message appears ("Incorrect password") | | |
+| AU-6 | Successful customer login | Enter valid demo credentials, click Sign In | Green toast appears; page switches to Customer Dashboard | | |
+| AU-7 | Header updates on login | Check header after logging in | Account link now shows "Hi, Krisha" (or first name) | | |
+| AU-8 | Create Account tab | Click "Create Account" tab | Registration form appears with Name, Email, Mobile, City, Password | | |
+| AU-9 | Password strength meter | Type password in Create Account form | 4-bar meter updates dynamically (Weak, Fair, Good, Strong) | | |
+| AU-10 | Registration validation | Submit blank form or mismatched passwords | Explicit inline error message prevents registration | | |
+| AU-11 | Duplicate email check | Try to register with already existing email | Alert states account with email already exists | | |
+| AU-12 | New customer register | Fill valid new customer details and submit | Account created, success toast shown, logged in to Dashboard | | |
+| AU-13 | Customer dashboard | View dashboard panels | Displays avatar monogram, contact info, and status pill | | |
+| AU-14 | Edit customer profile | Click "Edit Profile", change city/phone, save | Toast confirms; profile details update immediately | | |
+| AU-15 | Cart & activity panel | Add products to cart, open Dashboard Cart tab | Cart items, count, and subtotal displayed with enquiry link | | |
+| AU-16 | Security / Change password | Enter current and new password, save | Password updated; success notification shown | | |
+| AU-17 | Forgot password flow | Click "Forgot password?", enter email, demo code 123456 | Password resets; allows immediate login with new password | | |
+| AU-18 | Cart auto-integration | Add items, open cart.html while logged in | Customer name and mobile auto-attached to WhatsApp order text | | |
+| AU-19 | Customer logout | Click "Log Out" in dashboard | Session cleared, toast confirms, header returns to "Sign In" | | |
+
+---
+
 ## Sign-off
 
 | Field | Value |

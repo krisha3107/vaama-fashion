@@ -1,0 +1,517 @@
+/* =====================================================================
+   VAAMA FASHION — css/auth.css
+   Customer Registration, Login, Forgot Password & Account Dashboard.
+   ===================================================================== */
+
+/* ---------- layout & container ---------- */
+.auth-page {
+  padding: 3rem 0 4.5rem;
+}
+
+.auth-wrap {
+  width: min(100%, 520px);
+  margin-inline: auto;
+}
+
+.auth-wrap--wide {
+  width: min(100%, 860px);
+}
+
+.auth-card {
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 24px rgba(43, 41, 39, .06);
+  border-radius: var(--radius);
+  padding: 2.25rem 2.25rem 2.5rem;
+}
+
+/* ---------- tabs ---------- */
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 2rem;
+  gap: 0;
+}
+
+.auth-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: .85rem 1rem;
+  font: inherit;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: -2px;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.auth-tab-btn:hover {
+  color: var(--charcoal);
+}
+
+.auth-tab-btn.is-active {
+  color: var(--rose);
+  font-weight: 600;
+  border-bottom-color: var(--rose);
+}
+
+/* ---------- form headings & text ---------- */
+.auth-form-head {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.auth-form-head h2 {
+  font-size: 1.65rem;
+  margin-bottom: .35rem;
+}
+
+.auth-form-head p {
+  color: var(--ink-soft);
+  font-size: .95rem;
+  margin: 0;
+}
+
+/* ---------- demo credentials callout ---------- */
+.demo-auth-box {
+  background: #FFF7EB;
+  border: 1px dashed #B98A1F;
+  border-radius: var(--radius);
+  padding: .9rem 1.1rem;
+  margin-bottom: 1.5rem;
+  font-size: .88rem;
+}
+
+.demo-auth-box strong {
+  color: #5A4A10;
+  display: block;
+  margin-bottom: .3rem;
+}
+
+.demo-auth-creds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.25rem;
+  color: #6C5512;
+  font-size: .85rem;
+  margin-bottom: .6rem;
+}
+
+.demo-auth-creds code {
+  background: rgba(255, 255, 255, .7);
+  padding: .1rem .35rem;
+  border-radius: 2px;
+  font-family: Consolas, monospace;
+}
+
+.btn--quick-fill {
+  background: #855C18;
+  color: #fff;
+  font-size: .78rem;
+  padding: .35rem .75rem;
+  min-height: 32px;
+  letter-spacing: .05em;
+  border: none;
+}
+
+.btn--quick-fill:hover {
+  background: #64440F;
+  color: #fff;
+}
+
+/* ---------- inputs & password reveal ---------- */
+.password-field-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field-wrap input {
+  padding-right: 3rem !important;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: .5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: .4rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+}
+
+.password-toggle-btn:hover {
+  color: var(--charcoal);
+}
+
+/* ---------- password strength meter ---------- */
+.pwd-meter-wrap {
+  margin-top: .4rem;
+  margin-bottom: .25rem;
+}
+
+.pwd-meter-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  height: 5px;
+  background: transparent;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: .3rem;
+}
+
+.pwd-meter-segment {
+  height: 100%;
+  background: var(--line);
+  border-radius: 1px;
+  transition: background-color .2s ease;
+}
+
+.pwd-meter-segment.lvl-1 { background: #D9534F; }
+.pwd-meter-segment.lvl-2 { background: #F0AD4E; }
+.pwd-meter-segment.lvl-3 { background: #337AB7; }
+.pwd-meter-segment.lvl-4 { background: var(--sage); }
+
+.pwd-meter-label {
+  font-size: .78rem;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---------- preference chips ---------- */
+.pref-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .4rem;
+}
+
+.pref-chip {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .85rem;
+  padding: .35rem .75rem;
+  background: var(--ivory);
+  border: 1px solid #8f877d;
+  border-radius: 999px;
+  user-select: none;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.pref-chip input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.pref-chip.is-checked {
+  background: var(--sand);
+  border-color: var(--rose);
+  color: var(--rose-dark);
+  font-weight: 600;
+}
+
+/* ---------- row helpers ---------- */
+.auth-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1.25rem;
+  font-size: .88rem;
+}
+
+.auth-row-between label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  margin: 0;
+}
+
+.auth-switch-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  font-size: .92rem;
+  color: var(--ink-soft);
+}
+
+.auth-switch-link a {
+  font-weight: 600;
+  color: var(--rose);
+}
+
+/* ---------- feedback messages ---------- */
+.auth-alert {
+  padding: .75rem 1rem;
+  border-radius: var(--radius);
+  font-size: .9rem;
+  margin-bottom: 1.25rem;
+  display: none;
+}
+
+.auth-alert.is-visible {
+  display: block;
+}
+
+.auth-alert--error {
+  background: #FBEAEA;
+  border-left: 4px solid var(--danger);
+  color: #721C24;
+}
+
+.auth-alert--success {
+  background: #EBF5EE;
+  border-left: 4px solid var(--sage);
+  color: #155724;
+}
+
+.auth-alert--info {
+  background: #EAF2FB;
+  border-left: 4px solid var(--focus);
+  color: #0C5460;
+}
+
+/* ---------- customer dashboard ---------- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+.dashboard-sidebar {
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--rose);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(140, 74, 69, .25);
+}
+
+.user-fullname {
+  font-size: 1.35rem;
+  margin-bottom: .2rem;
+}
+
+.user-email-text {
+  font-size: .88rem;
+  color: var(--ink-soft);
+  word-break: break-all;
+  margin-bottom: .75rem;
+}
+
+.user-status-pill {
+  display: inline-block;
+  padding: .2rem .75rem;
+  border-radius: 999px;
+  background: var(--sage);
+  color: #fff;
+  font-size: .75rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.dash-nav {
+  width: 100%;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-top: .5rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.dash-nav button {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: .65rem .85rem;
+  font: inherit;
+  font-size: .92rem;
+  text-align: left;
+  cursor: pointer;
+  color: var(--charcoal);
+  transition: background .15s ease, border-color .15s ease;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.dash-nav button:hover {
+  background: var(--ivory);
+  border-color: var(--line);
+}
+
+.dash-nav button.is-active {
+  background: var(--charcoal);
+  color: #fff;
+  font-weight: 600;
+}
+
+.dash-nav button.is-active svg {
+  stroke: var(--sand);
+}
+
+.btn--logout {
+  margin-top: 1.5rem;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--charcoal);
+  color: var(--charcoal);
+  font-size: .85rem;
+  min-height: 40px;
+}
+
+.btn--logout:hover {
+  background: var(--charcoal);
+  color: #fff;
+}
+
+.dashboard-content {
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+
+.dash-panel {
+  display: none;
+}
+
+.dash-panel.is-active {
+  display: block;
+}
+
+.dash-panel-head {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.dash-panel-head h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.profile-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+  margin-bottom: 1.5rem;
+}
+
+.profile-info-table tr {
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-info-table tr:last-child {
+  border-bottom: none;
+}
+
+.profile-info-table th {
+  text-align: left;
+  padding: .8rem 0;
+  width: 35%;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.profile-info-table td {
+  padding: .8rem 0;
+  color: var(--charcoal);
+}
+
+.saved-cart-summary {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+}
+
+.saved-cart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .75rem;
+}
+
+.saved-cart-head h3 {
+  margin: 0;
+}
+
+.saved-cart-badge {
+  background: var(--rose);
+  color: #fff;
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+/* ---------- forgot password flow ---------- */
+.forgot-card {
+  display: none;
+}
+
+.forgot-card.is-active {
+  display: block;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 760px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .auth-card {
+    padding: 1.75rem 1.25rem;
+  }
+  .dashboard-content {
+    padding: 1.5rem 1.25rem;
+  }
+}

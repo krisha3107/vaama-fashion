@@ -21,6 +21,13 @@
     /* ----- build WhatsApp order summary text ----- */
     function buildOrderMessage(details) {
       var lines = ["*Order Enquiry – VAAMA FASHION*", ""];
+      var user = (VF.storage && typeof VF.storage.getCurrentUser === "function") ? VF.storage.getCurrentUser() : null;
+      if (user) {
+        lines.push("*Customer:* " + user.name);
+        if (user.phone) lines.push("*Mobile:* +91 " + user.phone);
+        if (user.city) lines.push("*Area / City:* " + user.city);
+        lines.push("");
+      }
       details.lines.forEach(function (it) {
         if (it.problem) return;     // skip unavailable/invalid lines from the message
         lines.push("• " + it.product.name);
@@ -102,6 +109,11 @@
         : '<button class="btn btn--whatsapp" type="button" disabled>Send order on WhatsApp</button>' +
           '<p class="summary-problem-note">All items in your cart are currently unavailable or have an issue. Remove or update them before ordering.</p>';
 
+      var user = (VF.storage && typeof VF.storage.getCurrentUser === "function") ? VF.storage.getCurrentUser() : null;
+      var authNoteHtml = user
+        ? '<p class="summary-note" style="color:var(--sage)">✓ Signed in as <strong>' + esc(user.name) + '</strong>. Your details will be included in the WhatsApp enquiry.</p>'
+        : '<p class="summary-note" style="color:var(--ink-soft)"><a href="login.html?redirect=cart.html">Sign in or register</a> to automatically include your name and mobile in this enquiry.</p>';
+
       summaryEl.innerHTML =
         "<h2>Order summary</h2>" +
         details.lines.map(function (it) {
@@ -113,6 +125,7 @@
         '<div class="summary-total"><span>Subtotal</span><span>' + fmt(details.subtotal) + "</span></div>" +
         (details.problemCount > 0
           ? '<p class="summary-problem-note">One or more items above are excluded from the subtotal. Remove them and re-check before ordering.</p>' : "") +
+        authNoteHtml +
         '<p class="summary-note">Opening WhatsApp starts a chat. Delivery and final availability must be confirmed by the shop. This is not a payment or a confirmed order.</p>' +
         '<div class="cart-actions">' + waBtnHtml + "</div>" +
         '<div class="cart-link-row">' +
