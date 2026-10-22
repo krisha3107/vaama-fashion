@@ -1,0 +1,218 @@
+/* VAAMA FASHION — css/checkout.css */
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2.5rem;
+  padding: 2.5rem 0 4rem;
+  align-items: start;
+}
+
+.checkout-card {
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  padding: 1.75rem 2rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(43, 41, 39, .04);
+}
+
+.checkout-card h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.checkout-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.delivery-options, .payment-options {
+  display: grid;
+  gap: .75rem;
+  margin-bottom: 1.25rem;
+}
+
+.choice-box {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--cream);
+  cursor: pointer;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.choice-box:hover {
+  border-color: var(--charcoal);
+}
+
+.choice-box input[type="radio"] {
+  margin-top: .2rem;
+}
+
+.choice-box.is-selected {
+  border-color: var(--rose);
+  background: #FFF9F8;
+}
+
+.choice-box strong {
+  display: block;
+  font-size: .95rem;
+  color: var(--charcoal);
+}
+
+.choice-box span {
+  font-size: .84rem;
+  color: var(--ink-soft);
+}
+
+/* Order summary box on checkout page */
+.checkout-summary {
+  position: sticky;
+  top: 5.75rem;
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  padding: 1.75rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px rgba(43, 41, 39, .04);
+}
+
+.checkout-summary h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.checkout-summary-items {
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1rem;
+  padding-bottom: .5rem;
+}
+
+.checkout-summary-item {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  gap: .75rem;
+  align-items: center;
+  padding: .5rem 0;
+  font-size: .9rem;
+}
+
+.checkout-summary-item img, .checkout-summary-item .img-placeholder {
+  width: 50px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.checkout-summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: .35rem 0;
+  font-size: .92rem;
+  color: var(--ink-soft);
+}
+
+.checkout-summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin-top: .75rem;
+  padding-top: .75rem;
+  border-top: 2px solid var(--line);
+}
+
+/* Confirmation modal / panel */
+.order-success-screen {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  background: var(--ivory);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  max-width: 680px;
+  margin: 3rem auto;
+  box-shadow: 0 6px 30px rgba(43, 41, 39, .06);
+}
+
+.order-success-icon {
+  width: 68px;
+  height: 68px;
+  background: var(--sage);
+  color: #fff;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.order-badge-pill {
+  display: inline-block;
+  background: var(--sand);
+  color: var(--charcoal);
+  padding: .35rem .9rem;
+  border-radius: 999px;
+  font-family: Consolas, monospace;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* Cart choice strip */
+.checkout-choice-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: .5rem 0;
+  color: var(--ink-soft);
+  font-size: .8rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.checkout-choice-divider::before,
+.checkout-choice-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--line);
+}
+.checkout-choice-divider:not(:empty)::before {
+  margin-right: .75em;
+}
+.checkout-choice-divider:not(:empty)::after {
+  margin-left: .75em;
+}
+
+.btn--checkout-direct {
+  background: var(--charcoal);
+  color: #fff;
+  width: 100%;
+}
+.btn--checkout-direct:hover {
+  background: #000;
+  color: #fff;
+}
+
+@media (max-width: 820px) {
+  .checkout-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .checkout-summary {
+    position: static;
+  }
+  .checkout-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

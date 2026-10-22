@@ -1,4 +1,4 @@
-/* =====================================================================
+﻿/* =====================================================================
    VAAMA FASHION — js/auth.js
    Customer Registration, Login, Forgot Password & Account Dashboard.
    Vanilla JS only, localStorage backed.
@@ -467,7 +467,7 @@
         '</div>' +
         '<div style="display:flex;flex-wrap:wrap;gap:.75rem">' +
         '<a class="btn btn--primary btn--small" href="cart.html">View & Send Cart Enquiry</a>' +
-        '<a class="btn btn--outline btn--small" href="shop.html">Continue Shopping</a>' +
+        '<a class="btn btn--dark btn--small" href="checkout.html">Direct Checkout</a> <a class="btn btn--outline btn--small" href="shop.html">Continue Shopping</a>' +
         '</div>' +
         '</div>';
     }

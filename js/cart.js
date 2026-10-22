@@ -127,7 +127,7 @@
           ? '<p class="summary-problem-note">One or more items above are excluded from the subtotal. Remove them and re-check before ordering.</p>' : "") +
         authNoteHtml +
         '<p class="summary-note">Opening WhatsApp starts a chat. Delivery and final availability must be confirmed by the shop. This is not a payment or a confirmed order.</p>' +
-        '<div class="cart-actions">' + waBtnHtml + "</div>" +
+        '<div class="cart-actions">' + '<a class="btn btn--primary btn--checkout-direct" href="checkout.html">Direct Online Checkout</a>' + '<div class="checkout-choice-divider"><span>or order via WhatsApp</span></div>' + waBtnHtml + "</div>" +
         '<div class="cart-link-row">' +
         '<a class="text-link" href="shop.html">Continue shopping</a>' +
         '<button type="button" id="clear-cart">Clear cart</button></div>';

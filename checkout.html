@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout – VAAMA FASHION</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/checkout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="checkout">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="container">
+        <p class="eyebrow">Direct Order</p>
+        <h1>Secure Checkout</h1>
+        <p class="lead">Complete your shipping and payment details to place your direct order with Vaama Fashion.</p>
+      </div>
+    </div>
+
+    <!-- Empty cart message -->
+    <div class="container" id="checkout-empty" style="padding:3rem 0" hidden>
+      <div class="empty-state">
+        <h2>Your cart is empty</h2>
+        <p>You need items in your cart before checking out.</p>
+        <a class="btn btn--dark" href="shop.html" style="margin-top:.75rem">Browse collection</a>
+      </div>
+    </div>
+
+    <!-- Success Screen (hidden until placed) -->
+    <div class="container" id="checkout-success" hidden>
+      <div class="order-success-screen">
+        <div class="order-success-icon" aria-hidden="true">
+          <svg class="icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="eyebrow" style="color:var(--sage)">Order Successfully Placed</p>
+        <h2>Thank you for your purchase!</h2>
+        <p class="lead" style="margin-inline:auto;margin-bottom:1rem">Your order has been recorded directly. We have sent a confirmation to your registered contact number.</p>
+        
+        <div class="order-badge-pill" id="success-order-number">VF-ORD-XXXX</div>
+        
+        <div style="background:var(--cream);border:1px solid var(--line);padding:1.25rem;border-radius:var(--radius);text-align:left;max-width:480px;margin:0 auto 1.75rem">
+          <p style="margin:0 0 .5rem"><strong>Customer:</strong> <span id="success-customer-name"></span></p>
+          <p style="margin:0 0 .5rem"><strong>Delivery:</strong> <span id="success-delivery-method"></span></p>
+          <p style="margin:0 0 .5rem"><strong>Total Paid / Due:</strong> <strong id="success-order-total" style="color:var(--rose)"></strong></p>
+          <p style="margin:0;font-size:.85rem;color:var(--ink-soft)" id="success-payment-note"></p>
+        </div>
+
+        <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:1rem">
+          <a class="btn btn--primary" href="shop.html">Continue Shopping</a>
+          <a class="btn btn--outline" href="login.html">View My Orders</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkout Main Form + Summary Layout -->
+    <div class="container checkout-layout" id="checkout-form-container">
+      <div>
+        <form id="checkout-form" novalidate>
+
+          <!-- 1. Customer Information -->
+          <div class="checkout-card">
+            <h2>1. Customer details</h2>
+            <div id="checkout-user-hint" style="margin-bottom:1rem;font-size:.88rem;color:var(--ink-soft)"></div>
+            <div class="checkout-grid-2">
+              <div class="field">
+                <label for="co-name">Full Name <span style="color:var(--danger)">*</span></label>
+                <input type="text" id="co-name" placeholder="Krisha Patel" required>
+              </div>
+              <div class="field">
+                <label for="co-phone">Mobile Number (WhatsApp) <span style="color:var(--danger)">*</span></label>
+                <input type="tel" id="co-phone" placeholder="e.g. 7600524729" maxlength="15" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="co-email">Email Address (optional)</label>
+              <input type="email" id="co-email" placeholder="name@example.com">
+            </div>
+          </div>
+
+          <!-- 2. Delivery Method -->
+          <div class="checkout-card">
+            <h2>2. Delivery option</h2>
+            <div class="delivery-options">
+              <label class="choice-box is-selected" id="choice-shipping">
+                <input type="radio" name="deliveryMethod" value="shipping" checked>
+                <div>
+                  <strong>Home Delivery (Gujarat / India)</strong>
+                  <span>Standard delivery in 2-4 business days. Free for orders ₹1,999+, otherwise ₹99.</span>
+                </div>
+              </label>
+              <label class="choice-box" id="choice-pickup">
+                <input type="radio" name="deliveryMethod" value="pickup">
+                <div>
+                  <strong>Store Pickup (Free)</strong>
+                  <span>Pick up directly from store: 12 No., Western City, LP Savani Road, Adajan, Surat.</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Shipping address fields -->
+            <div id="shipping-address-wrap">
+              <div class="field">
+                <label for="co-address">Street Address <span style="color:var(--danger)">*</span></label>
+                <input type="text" id="co-address" placeholder="Flat, society, street and landmark">
+              </div>
+              <div class="checkout-grid-2">
+                <div class="field">
+                  <label for="co-city">City <span style="color:var(--danger)">*</span></label>
+                  <input type="text" id="co-city" value="Surat" placeholder="Surat">
+                </div>
+                <div class="field">
+                  <label for="co-pincode">Pincode</label>
+                  <input type="text" id="co-pincode" placeholder="395009" maxlength="6">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Payment Method -->
+          <div class="checkout-card">
+            <h2>3. Payment method</h2>
+            <div class="payment-options">
+              <label class="choice-box is-selected">
+                <input type="radio" name="paymentMethod" value="cod" checked>
+                <div>
+                  <strong>Cash on Delivery (COD) / Pay on Pickup</strong>
+                  <span>Pay with cash or UPI QR code when your order arrives.</span>
+                </div>
+              </label>
+              <label class="choice-box">
+                <input type="radio" name="paymentMethod" value="upi">
+                <div>
+                  <strong>Instant UPI (Google Pay, PhonePe, Paytm)</strong>
+                  <span>Direct UPI confirmation demo.</span>
+                </div>
+              </label>
+              <label class="choice-box">
+                <input type="radio" name="paymentMethod" value="card">
+                <div>
+                  <strong>Debit / Credit Card / NetBanking</strong>
+                  <span>Card simulator with instant authorization.</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="field" style="margin-top:1rem">
+              <label for="co-notes">Order Notes or Sizing Instructions (optional)</label>
+              <textarea id="co-notes" rows="2" placeholder="Any specific requirements regarding sizes, fit, or delivery instructions..."></textarea>
+            </div>
+          </div>
+
+          <p class="field-error" id="checkout-error" aria-live="polite" style="margin-bottom:1rem;font-size:.95rem"></p>
+
+          <button class="btn btn--primary" id="btn-submit-order" type="submit" style="width:100%;font-size:1rem;min-height:48px">
+            Place Order Now
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Summary Sidebar -->
+      <aside class="checkout-summary">
+        <h2>Order summary</h2>
+        <ul class="checkout-summary-items" id="co-items-list"></ul>
+
+        <div class="checkout-summary-row">
+          <span>Items Subtotal</span>
+          <span id="co-subtotal">₹0</span>
+        </div>
+        <div class="checkout-summary-row">
+          <span>Delivery</span>
+          <span id="co-shipping-fee">Free</span>
+        </div>
+        <div class="checkout-summary-total">
+          <span>Total</span>
+          <span id="co-total" style="color:var(--rose)">₹0</span>
+        </div>
+
+        <div style="margin-top:1.25rem;font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:.75rem">
+          <p style="margin:0 0 .5rem">🔒 Safe & Direct Purchase</p>
+          <p style="margin:0">Prefer to ask questions first? <a href="cart.html">Order via WhatsApp instead</a>.</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/whatsapp.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

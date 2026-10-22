@@ -1,4 +1,4 @@
-/* =====================================================================
+﻿/* =====================================================================
    VAAMA FASHION — js/storage.js
    The ONLY file that reads/writes browser storage.
    ===================================================================== */
@@ -14,7 +14,8 @@
     cart:          PREFIX + "cart",
     session:       PREFIX + "adminSession",
     users:         PREFIX + "users",
-    userSession:   PREFIX + "userSession"
+    userSession:   PREFIX + "userSession",
+    orders:        PREFIX + "orders"
   };
 
   /* ---------- low-level storage with in-memory fallback ---------- */
@@ -533,6 +534,129 @@
     return { ok: true };
   }
 
+  /* ---------- orders & direct checkout ---------- */
+  function loadOrders() {
+    var raw = rawGet(KEYS.orders);
+    if (raw === null) return [];
+    var parsed = safeJSON(raw);
+    return (parsed.ok && Array.isArray(parsed.value)) ? parsed.value : [];
+  }
+
+  function saveOrders(orders) {
+    rawSet(KEYS.orders, JSON.stringify(orders));
+    return true;
+  }
+
+  function getOrders() {
+    return clone(loadOrders());
+  }
+
+  function getOrderById(orderId) {
+    if (!orderId) return null;
+    var list = loadOrders();
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].id === orderId) return clone(list[i]);
+    }
+    return null;
+  }
+
+  function getOrdersByUserId(userId) {
+    if (!userId) return [];
+    return loadOrders().filter(function (o) { return o.userId === userId; });
+  }
+
+  function createOrder(orderData) {
+    if (!orderData || typeof orderData !== "object") {
+      return { ok: false, error: "Missing order information." };
+    }
+
+    var customerName = (orderData.customerName || "").trim();
+    var customerPhone = (orderData.customerPhone || "").trim();
+    var customerEmail = (orderData.customerEmail || "").trim();
+    var deliveryMethod = orderData.deliveryMethod === "pickup" ? "pickup" : "shipping";
+    var address = (orderData.address || "").trim();
+    var city = (orderData.city || "").trim();
+    var pincode = (orderData.pincode || "").trim();
+    var paymentMethod = (orderData.paymentMethod || "cod").trim();
+    var notes = (orderData.notes || "").trim();
+
+    if (!customerName || customerName.length < 2) {
+      return { ok: false, error: "Please enter a valid full name (minimum 2 characters)." };
+    }
+
+    var phoneDigits = customerPhone.replace(/[\s+\-()]/g, "");
+    if (phoneDigits.length > 10 && phoneDigits.indexOf("91") === 0) phoneDigits = phoneDigits.slice(2);
+    if (!phoneDigits || !/^[6-9]\d{9}$/.test(phoneDigits)) {
+      return { ok: false, error: "Please enter a valid 10-digit Indian mobile number." };
+    }
+
+    if (deliveryMethod === "shipping") {
+      if (!address || address.length < 5) {
+        return { ok: false, error: "Please enter a complete delivery street address." };
+      }
+      if (!city) {
+        return { ok: false, error: "Please enter your city." };
+      }
+    }
+
+    var cartDetails = cart.details();
+    if (!cartDetails.lines.length) {
+      return { ok: false, error: "Your cart is currently empty." };
+    }
+
+    var validLines = cartDetails.lines.filter(function (l) { return !l.problem; });
+    if (!validLines.length) {
+      return { ok: false, error: "All items in your cart are currently unavailable." };
+    }
+
+    var orderNumber = "VF-ORD-" + Date.now().toString(36).toUpperCase() + "-" + Math.floor(100 + Math.random() * 900);
+    var currentUser = getCurrentUser();
+
+    var order = {
+      id: orderNumber,
+      orderNumber: orderNumber,
+      userId: currentUser ? currentUser.id : null,
+      customerName: customerName,
+      customerPhone: phoneDigits,
+      customerEmail: customerEmail || (currentUser ? currentUser.email : ""),
+      deliveryMethod: deliveryMethod,
+      shippingAddress: {
+        address: deliveryMethod === "shipping" ? address : "In-store pickup: 12 No., Western City, Adajan, Surat",
+        city: deliveryMethod === "shipping" ? (city || "Surat") : "Surat",
+        pincode: pincode || ""
+      },
+      paymentMethod: paymentMethod, // 'cod', 'upi', 'card'
+      paymentStatus: paymentMethod === "cod" ? "Pending on Delivery" : "Paid (Demo)",
+      orderStatus: "Confirmed",
+      items: validLines.map(function (it) {
+        return {
+          productId: it.product.id,
+          name: it.product.name,
+          size: it.size,
+          colour: it.colour,
+          quantity: it.quantity,
+          unitPrice: it.unitPrice,
+          lineTotal: it.lineTotal,
+          image: it.product.image || ""
+        };
+      }),
+      subtotal: cartDetails.subtotal,
+      shippingFee: deliveryMethod === "pickup" ? 0 : (cartDetails.subtotal >= 1999 ? 0 : 99),
+      total: cartDetails.subtotal + (deliveryMethod === "pickup" ? 0 : (cartDetails.subtotal >= 1999 ? 0 : 99)),
+      notes: notes,
+      createdAt: new Date().toISOString()
+    };
+
+    var allOrders = loadOrders();
+    allOrders.unshift(order);
+    saveOrders(allOrders);
+
+    // Clear cart after checkout
+    cart.clear();
+
+    return { ok: true, order: clone(order) };
+  }
+
   /* ---------- cart ---------- */
   function notifyBadge() {
     if (VF.ui && typeof VF.ui.updateCartBadge === "function") VF.ui.updateCartBadge();
@@ -709,7 +833,11 @@
     clearCurrentUser: clearCurrentUser,
     updateUserProfile: updateUserProfile,
     changePassword: changePassword,
-    resetPasswordByEmail: resetPasswordByEmail
+    resetPasswordByEmail: resetPasswordByEmail,
+    getOrders: getOrders,
+    getOrderById: getOrderById,
+    getOrdersByUserId: getOrdersByUserId,
+    createOrder: createOrder
   };
   VF.auth = {
     getUsers: getUsers,
